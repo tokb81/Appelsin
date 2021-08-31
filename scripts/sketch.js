@@ -4,7 +4,7 @@ let appelsiner = [];
 //
 const grav = 0.1;
 const col = [220,110,0];
-let interval = [0.5*60,1*60];
+let interval = [3*60,3*60];
 let timeToNext = interval[1];
 
 // Turbanen
@@ -24,9 +24,11 @@ function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
 
 	textAlign(CENTER, CENTER);
-
-	shootNew();
-	shootNew();
+	let START_NUMBER = 1;
+	for (let i = 0; i < START_NUMBER; i++) {
+		shootNew();
+	}
+	
 	// parametrene til Kurv-konstruktøren er (x, y, bredde, dybde, speed)
 	turban = new Kurv(670, 100, 70, 50, 10);
 }
@@ -130,7 +132,8 @@ function shootNew(amount = 1) {
 	for (let i = 0; i < amount; i++) {
 		rad = random(18,22);
 		y = random(height/10*3, height/10*9);
-		appelsiner.push(new Appelsin(rad, null, y))
+		//appelsiner.push(new Appelsin(rad, null, y))
+		appelsiner.push(new Appel(rad, null, null))
 	}
 }
 

@@ -54,7 +54,7 @@ class Kurv {
 	 * midtpunkts koordinater og boldens radius
 	 */
 	grebet(appelsin) {
-		if ((appelsin.y < this.y+3 && appelsin.y > this.y-3) && appelsin.x > this.x+appelsin.rad && appelsin.x < this.x+this.bred-appelsin.rad) {
+		if ((appelsin.y < this.y+7 && appelsin.y > this.y-3) && appelsin.x > this.x+appelsin.rad && appelsin.x < this.x+this.bred-appelsin.rad) {
 			BOOMmp3.play();
 			return true;
 		}
