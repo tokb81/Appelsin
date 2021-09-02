@@ -1,22 +1,26 @@
-// array til appelsiner
-let appelsiner = [];
+// array til frugter
+let frugter = [];
 
 //
-const grav = 0.1;
-const col = [220,110,0];
-let interval = [3*60,3*60];
+const AMOUNT_OF_ENEMY_TYPES = 4;
+const START_NUMBER = 1;
+const LOST_COLOR = [230, 110, 0]
+const WON_COLOR = [0, 255, 0]
+//
+let interval = [1*60, 1.5*60]; // the time between shots
 let timeToNext = interval[1];
 
 // Turbanen
 let turban;
 
 // Øvrige
+let type = null;
 let score = 0;
 let missed = 0;
-const maxliv = 8 // bruges til at beregne hvor mange appelsiner man ikke har grebet
+const maxliv = 8 // bruges til at beregne hvor mange frugter man ikke har grebet
 let liv = maxliv;
 let removed = 0; // holder styr på om der er blevet slettet flere end 1 appelsin
-				 // når vi sletter dem for appelsiner
+				 // når vi sletter dem for frugter
 let spilIgang = true;   // flag
 let spilWon = false;    // har vi vundet eller tabt
 
@@ -24,7 +28,7 @@ function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
 
 	textAlign(CENTER, CENTER);
-	let START_NUMBER = 1;
+	
 	for (let i = 0; i < START_NUMBER; i++) {
 		shootNew();
 	}
@@ -49,13 +53,13 @@ function draw() {
 
 	}
 	else if (!spilWon){ // så er Game Over det der skal vises
-		fill(col);
+		fill(LOST_COLOR);
 		textSize(46);
 		text("Game Over", width/2 + random(-5,5), height/2 + random(3 ));
 		text("Score: "+score, width/2, height/2 + 50);
 	}
 	else { // ellers er spillet vundet
-		fill([0,255,0]);
+		fill(WON_COLOR);
 		textSize(46);
 		text("Game Won", width/2 + random(-5,5), height/2 + random(3 ));
 		text("Score: "+score, width/2, height/2 + 50);
@@ -70,7 +74,7 @@ function display() {
 	text("Tabt: " + (maxliv - liv), width-240, 30);
 
 	// Vi får appesinerne til at chekke om de skal tegnes
-	appelsiner.forEach(appelsin => {
+	frugter.forEach(appelsin => {
 		appelsin.tegn();
 	});
 
@@ -80,8 +84,8 @@ function display() {
 	
 function move() {
 
-	// vi lader appelsinerne håndtere deres bevægelse
-	appelsiner.forEach(appelsin => {
+	// vi lader frugterne håndtere deres bevægelse
+	frugter.forEach(appelsin => {
 		appelsin.move()
 	});
 
@@ -90,17 +94,17 @@ function move() {
 
 function checkMissOrHit() {
 	removed = 0;
-	// vi tjekker hvor mange appelsiner der er grebet og ude
-	for (let i = 0; i < appelsiner.length; i++) {
-		if (appelsiner[i].x > width || appelsiner[i].y > height) {
-			appelsiner.splice(i, 1);
+	// vi tjekker hvor mange frugter der er grebet og ude
+	for (let i = 0; i < frugter.length; i++) {
+		if (frugter[i].x > width || frugter[i].y > height) {
+			frugter.splice(i, 1);
 			removed += 1;
 			i -= 1; // fordi vi nu har fjernet en skal indekset rykkes
 			miss();
 		}
-		else if (appelsiner[i].yspeed > 0) {
-			if (turban.grebet(appelsiner[i])) {
-				appelsiner.splice(i, 1);
+		else if (frugter[i].yspeed > 0) {
+			if (turban.grebet(frugter[i])) {
+				frugter.splice(i, 1);
 				removed += 1;
 				i -= 1 // fordi vi nu har fjernet en skal indekset rykkes
 				score += 1;
@@ -126,14 +130,32 @@ function checkWinLoss() {
 	}
 }    
 
-function shootNew(amount = 1) {
+function shootNew(amount = 1, type = null) {
 
 	//Her skal vi sørge for at en ny appelsin skydes afsted
 	for (let i = 0; i < amount; i++) {
+		if (type == null) {
+			type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
+		}
 		rad = random(18,22);
-		y = random(height/10*3, height/10*9);
-		//appelsiner.push(new Appelsin(rad, null, y))
-		appelsiner.push(new Appel(rad, null, null))
+		switch (type) {
+			case 0:
+				frugter.push(new Appelsin(rad));
+				break;
+			case 1:
+				frugter.push(new Appel(rad));
+				break;
+			case 2:
+				frugter.push(new Pear(rad));
+				break;
+			case 3:
+				frugter.push(new Banana(rad));
+				break;
+			default:
+				console.log('someone forgot to update the shootNew() function after creating a new enemy type')
+				break;
+		}
+		type = null // reset the type
 	}
 }
 
