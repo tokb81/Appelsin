@@ -68,12 +68,13 @@ class Appel extends GravEnemy {
 		this.xspeed = random(-this.xmaxspeed, this.xmaxspeed);
 	}
 }
-
+let test;
 class SpiralEnemy extends Enemy {
-	constructor(rad, x=width/2, y=0, yspeed=1, rotTime=60, rotRadius=50, col, tid) {
+	constructor(rad, x=width/2, y=0, yspeed=1, rotPeriod=60, rotRadius=50, col, tid) {
 		super(rad, x, y, 0, yspeed, col, tid);
 		this.xstart = x;
-		this.rotTime = rotTime; // how long one rotation takes in frames
+		this.rotTime = 0; // keeping track of rotation timing
+		this.rotPeriod = rotPeriod; // how long one rotation takes in frames
 		this.rotRadius = rotRadius; // the radius of the cirkular motion
 		this.xCircle = 0; // used to create circle motion
 		this.yCircle = 0;
@@ -81,15 +82,16 @@ class SpiralEnemy extends Enemy {
 
 	move() {
 		if (this.tid <= 0) {
-			this.xCircle = (Math.cos(-this.tid/this.rotTime*2*Math.PI)*this.rotRadius);
-			this.yCircle = (Math.sin(-this.tid/this.rotTime*2*Math.PI)*this.rotRadius);
+			this.xCircle = (Math.cos(this.rotTime/this.rotPeriod*2*Math.PI)*this.rotRadius);
+			this.yCircle = (Math.sin(this.rotTime/this.rotPeriod*2*Math.PI)*this.rotRadius);
 			this.x = this.xCircle + this.xstart;
 			// it is easier to calculate the total distance traveled that add in every frame
 			this.y = this.yCircle + this.yspeed*(-this.tid);
+			console.log(this.y)
 		}
 	}
 }
-
+// TODO FIX WEIRD MODIFIER BEHAVIOR WHEN CHANGING YSPEED ON SPIRAL ENEMY BECAUSE YSPEED*(-THIS.TID)
 class Pear extends SpiralEnemy {
 	constructor(rad, x=null, y=null, yspeed=random(1,2), rotTime=60, rotRadius=50, col=[20,230,20], tid=random(100,200)) {
 		super(rad, x, y, yspeed, rotTime, rotRadius, col, tid)

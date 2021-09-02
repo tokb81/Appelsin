@@ -2,6 +2,18 @@
 let frugter = [];
 let modifiers = [];
 
+function Random(lower, upper=0) {
+	if (upper < lower) {
+		let temp = lower;
+		lower = upper;
+		upper = temp;
+	}
+	return Math.random()*(upper-lower) + lower
+}
+
+//
+let turban;
+
 //
 const AMOUNT_OF_ENEMY_TYPES = 4;
 const AMOUNT_OF_MODIFIER_TYPES = 2;
@@ -11,13 +23,10 @@ const WON_COLOR = [0, 255, 0];
 
 //intervals
 let enemyInterval = [1*60, 1.5*60]; // the time between shots
-let timeToNextEnemy = random(enemyInterval[0], enemyInterval[1]);
+let timeToNextEnemy = Random(enemyInterval[0], enemyInterval[1]);
 
 let modifierInterval = [15*60, 25*60]; // the tine between modifiers
-let timeToNextModifier = random(modifierInterval[0], modifierInterval[1]);
-
-// Turbanen
-let turban;
+let timeToNextModifier = Random(modifierInterval[0], modifierInterval[1]);
 
 // Øvrige
 let type = null;
@@ -32,6 +41,7 @@ let spilWon = false;    // har vi vundet eller tabt
 
 function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
+	
 
 	textAlign(CENTER, CENTER);
 	
@@ -89,7 +99,9 @@ function display() {
 	frugter.forEach(appelsin => {
 		appelsin.tegn();
 	});
-
+	modifiers.forEach(modifier => {
+		modifier.tegn();
+	});
 	// Her vises turbanen
 	turban.tegn();
 };
@@ -123,8 +135,27 @@ function checkMissOrHit() {
 			}
 		}
 	}
-	checkWinLoss() // checker om vi nu har vundet et eller tabt
-};
+
+	// vi tjekker også efter modifiers
+	for (let i = 0; i < modifiers.length; i++) {
+		// Hvis modifieren er grebet aktivere vi den
+		if (turban.grebet(modifiers[i]) ) { 
+			modifiers[i].activate(frugter);
+			modifiers.splice(i, 1);
+			removed += 1;
+			i -= 1;
+		} 
+		// hvis modifieren ikke er taget fjerner vi den
+		else if (modifiers[i].decayed) {
+			modifiers.splice(i, 1);
+			removed += 1;
+			i -= 1;
+		}
+	};
+
+	// til sidst tjekker vi om vi har vundet eller tabt
+	checkWinLoss()
+}
 
 function miss() {
 	missed += 1;
@@ -147,8 +178,9 @@ function shootNew(amount = 1, type = null) {
 	//Her skal vi sørge for at en ny appelsin skydes afsted
 	for (let i = 0; i < amount; i++) {
 		if (type == null) {
-			type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
+			//type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
 		}
+		
 		rad = random(18,22);
 		switch (type) {
 			case 0:
@@ -181,10 +213,10 @@ function modifierNew(amount = 1, type = null) {
 		rad = random(18,22);
 		switch (type) {
 			case 0:
-				modifiers.push(new ChangeSpeed(0.5)); // slows the enemy down
+				modifiers.push(new ChangeSpeed(0.5, [0,255,0])); // slows the enemy down
 				break;
 			case 1:
-				modifiers.push(new ChangeSpeed(2)); // speeds the enemy up
+				modifiers.push(new ChangeSpeed(2, [255,0,0])); // speeds the enemy up
 				break;
 			case 2:
 				

@@ -17,7 +17,7 @@ let BOOMmp3;
 
 function preload() {
 	turbanIMG = loadImage('assets/turban.png');
-	BOOMmp3 = loadSound('assets/boom.mp3')
+	BOOMmp3 = loadSound('assets/boom1.mp3')
 }
 
 class Kurv {
@@ -53,13 +53,30 @@ class Kurv {
 	 * "rent" ned gennem kurvens overkant. Parametrene er hhv. boldens
 	 * midtpunkts koordinater og boldens radius
 	 */
-	grebet(appelsin) {
-		if ((appelsin.y < this.y+7 && appelsin.y > this.y-3) && appelsin.x > this.x+appelsin.rad && appelsin.x < this.x+this.bred-appelsin.rad) {
-			BOOMmp3.play();
-			return true;
-		}
+	grebet(object) {
+		if (object instanceof Enemy) {
+			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+object.rad && object.x < this.x+this.bred-object.rad) {
+				BOOMmp3.play();
+				return true;
+			} 
+			else {
+				return false;
+			}
+		} else if (object instanceof ModifierBase) {
+			// sL is the sidelength of the modifiers
+			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+sL && object.x < this.x+this.bred-sL ) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+		} 
 		else {
+			console.log('wrong object passed to grebet()');
+			console.log(object);
 			return false;
 		}
+
+		
 	}
 }
