@@ -1,2 +1,3 @@
-# p5-appelsiner-i-turbanen
-Brush-up forløb af p5- og programmeringskompetencer ved starten af et nyt år med Digital Teknik
+# appelsin
+Jeg ville gerne gøre spillet lidt sværere end det var i starten, men med et fokus på at lære at bruge javascript classer bedre, specielt hvordan man arvede ting i javascript. Der skal også tilføjes nogle modifiers som både kan være godt og dårlige.
+Alt i alt skal spildet være mere udfordrende

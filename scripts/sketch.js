@@ -1,14 +1,20 @@
-// array til frugter
+// array til objekter
 let frugter = [];
+let modifiers = [];
 
 //
 const AMOUNT_OF_ENEMY_TYPES = 4;
+const AMOUNT_OF_MODIFIER_TYPES = 2;
 const START_NUMBER = 1;
-const LOST_COLOR = [230, 110, 0]
-const WON_COLOR = [0, 255, 0]
-//
-let interval = [1*60, 1.5*60]; // the time between shots
-let timeToNext = interval[1];
+const LOST_COLOR = [230, 110, 0];
+const WON_COLOR = [0, 255, 0];
+
+//intervals
+let enemyInterval = [1*60, 1.5*60]; // the time between shots
+let timeToNextEnemy = random(enemyInterval[0], enemyInterval[1]);
+
+let modifierInterval = [15*60, 25*60]; // the tine between modifiers
+let timeToNextModifier = random(modifierInterval[0], modifierInterval[1]);
 
 // Turbanen
 let turban;
@@ -17,7 +23,7 @@ let turban;
 let type = null;
 let score = 0;
 let missed = 0;
-const maxliv = 8 // bruges til at beregne hvor mange frugter man ikke har grebet
+let maxliv = 8; // bruges til at beregne hvor mange frugter man ikke har grebet
 let liv = maxliv;
 let removed = 0; // holder styr på om der er blevet slettet flere end 1 appelsin
 				 // når vi sletter dem for frugter
@@ -43,13 +49,19 @@ function draw() {
 	if (spilIgang) {
 		move(); // rykker alt og checker om de er grebet eller røget ud
 		display();
-		turban.move()
+		turban.move();
 
-		if (timeToNext <= 0) { // skal vi spawne en ny appelsin?
-			timeToNext = random( interval[0], interval[1] );
+		timeToNextEnemy -=1;
+		if (timeToNextEnemy <= 0) { // skal vi spawne en ny appelsin?
+			timeToNextEnemy = random( enemyInterval[0], enemyInterval[1] );
 			shootNew();
 		} 
-		timeToNext -=1
+		
+		timeToNextModifier -=1
+		if (timeToNextModifier <= 0) { // skal vi spawne en ny powerup/debuff?
+			timeToNextModifier = random( modifierInterval[0], modifierInterval[1] );
+			modifierNew();
+		} 
 
 	}
 	else if (!spilWon){ // så er Game Over det der skal vises
@@ -86,7 +98,7 @@ function move() {
 
 	// vi lader frugterne håndtere deres bevægelse
 	frugter.forEach(appelsin => {
-		appelsin.move()
+		appelsin.move();
 	});
 
 	checkMissOrHit();
@@ -106,7 +118,7 @@ function checkMissOrHit() {
 			if (turban.grebet(frugter[i])) {
 				frugter.splice(i, 1);
 				removed += 1;
-				i -= 1 // fordi vi nu har fjernet en skal indekset rykkes
+				i -= 1; // fordi vi nu har fjernet en skal indekset rykkes
 				score += 1;
 			}
 		}
@@ -125,7 +137,7 @@ function checkWinLoss() {
 		spilIgang = false;
 	}
 	else if (score >= 30) {
-		spilWon = true
+		spilWon = true;
 		spilIgang = false;
 	}
 }    
@@ -152,7 +164,36 @@ function shootNew(amount = 1, type = null) {
 				frugter.push(new Banana(rad));
 				break;
 			default:
-				console.log('someone forgot to update the shootNew() function after creating a new enemy type')
+				console.log('someone forgot to update the shootNew() function after creating a new enemy type');
+				break;
+		}
+		type = null; // reset the type
+	}
+}
+
+function modifierNew(amount = 1, type = null) {
+	// Her skal vi sørge for at en ny modifier spawnes
+	// Det er essentielt det samme som shootNew, og kunne godt integreres i den
+	for (let i = 0; i < amount; i++) {
+		if (type == null) {
+			type = Math.floor(Math.random()*AMOUNT_OF_MODIFIER_TYPES);
+		}
+		rad = random(18,22);
+		switch (type) {
+			case 0:
+				modifiers.push(new ChangeSpeed(0.5)); // slows the enemy down
+				break;
+			case 1:
+				modifiers.push(new ChangeSpeed(2)); // speeds the enemy up
+				break;
+			case 2:
+				
+				break;
+			case 3:
+				
+				break;
+			default:
+				console.log('someone forgot to update the modifierNew() function after creating a new modifier type');
 				break;
 		}
 		type = null // reset the type
