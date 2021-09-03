@@ -17,7 +17,7 @@ let BOOMmp3;
 
 function preload() {
 	turbanIMG = loadImage('assets/turban.png');
-	BOOMmp3 = loadSound('assets/boom1.mp3');
+	BOOMmp3 = loadSound('assets/boom.mp3');
 }
 
 class Kurv {
