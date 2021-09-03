@@ -8,7 +8,7 @@ function Random(lower, upper=0) {
 		lower = upper;
 		upper = temp;
 	}
-	return Math.random()*(upper-lower) + lower
+	return Math.random()*(upper-lower) + lower;
 }
 
 //
@@ -18,6 +18,7 @@ let turban;
 const AMOUNT_OF_ENEMY_TYPES = 4;
 const AMOUNT_OF_MODIFIER_TYPES = 2;
 const START_NUMBER = 1;
+const WIN_SCORE = 50;
 const LOST_COLOR = [230, 110, 0];
 const WON_COLOR = [0, 255, 0];
 
@@ -32,6 +33,7 @@ let timeToNextModifier = Random(modifierInterval[0], modifierInterval[1]);
 let type = null;
 let score = 0;
 let missed = 0;
+let extraliv = 0;
 let maxliv = 8; // bruges til at beregne hvor mange frugter man ikke har grebet
 let liv = maxliv;
 let removed = 0; // holder styr på om der er blevet slettet flere end 1 appelsin
@@ -41,10 +43,8 @@ let spilWon = false;    // har vi vundet eller tabt
 
 function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
-	
-
 	textAlign(CENTER, CENTER);
-	
+
 	for (let i = 0; i < START_NUMBER; i++) {
 		shootNew();
 	}
@@ -55,7 +55,7 @@ function setup() {  // kører kun en gang, når programmet startes
 
 function draw() {
 	background(0);
-	
+
 	if (spilIgang) {
 		move(); // rykker alt og checker om de er grebet eller røget ud
 		display();
@@ -65,13 +65,13 @@ function draw() {
 		if (timeToNextEnemy <= 0) { // skal vi spawne en ny appelsin?
 			timeToNextEnemy = random( enemyInterval[0], enemyInterval[1] );
 			shootNew();
-		} 
-		
-		timeToNextModifier -=1
+		}
+
+		timeToNextModifier -=1;
 		if (timeToNextModifier <= 0) { // skal vi spawne en ny powerup/debuff?
 			timeToNextModifier = random( modifierInterval[0], modifierInterval[1] );
 			modifierNew();
-		} 
+		}
 
 	}
 	else if (!spilWon){ // så er Game Over det der skal vises
@@ -105,7 +105,7 @@ function display() {
 	// Her vises turbanen
 	turban.tegn();
 };
-	
+
 function move() {
 
 	// vi lader frugterne håndtere deres bevægelse
@@ -139,12 +139,12 @@ function checkMissOrHit() {
 	// vi tjekker også efter modifiers
 	for (let i = 0; i < modifiers.length; i++) {
 		// Hvis modifieren er grebet aktivere vi den
-		if (turban.grebet(modifiers[i]) ) { 
+		if (turban.grebet(modifiers[i]) ) {
 			modifiers[i].activate(frugter);
 			modifiers.splice(i, 1);
 			removed += 1;
 			i -= 1;
-		} 
+		}
 		// hvis modifieren ikke er taget fjerner vi den
 		else if (modifiers[i].decayed) {
 			modifiers.splice(i, 1);
@@ -167,20 +167,20 @@ function checkWinLoss() {
 	if (liv < 1) {
 		spilIgang = false;
 	}
-	else if (score >= 30) {
+	else if (score >= WIN_SCORE) {
 		spilWon = true;
 		spilIgang = false;
 	}
-}    
+}
 
 function shootNew(amount = 1, type = null) {
 
 	//Her skal vi sørge for at en ny appelsin skydes afsted
 	for (let i = 0; i < amount; i++) {
 		if (type == null) {
-			//type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
+			type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
 		}
-		
+
 		rad = random(18,22);
 		switch (type) {
 			case 0:
@@ -213,16 +213,10 @@ function modifierNew(amount = 1, type = null) {
 		rad = random(18,22);
 		switch (type) {
 			case 0:
-				modifiers.push(new ChangeSpeed(0.5, [0,255,0])); // slows the enemy down
+				modifiers.push(new ChangeSpeed(0.1, [0,255,0])); // slows the enemy down
 				break;
 			case 1:
-				modifiers.push(new ChangeSpeed(2, [255,0,0])); // speeds the enemy up
-				break;
-			case 2:
-				
-				break;
-			case 3:
-				
+				modifiers.push(new ChangeSpeed(1.5, [255,0,0])); // speeds the enemy up
 				break;
 			default:
 				console.log('someone forgot to update the modifierNew() function after creating a new modifier type');
@@ -235,4 +229,17 @@ function modifierNew(amount = 1, type = null) {
 function keyPressed() {
 	// Funktionen gør ingenting lige nu
 	return false;  // Forebygger evt. browser default behaviour
+}
+
+function reset() {
+	extraliv = 0;
+	liv = maxliv;
+	missed = 0;
+	score = 0;
+	frugter = [];
+	modifiers = [];
+	timeToNextEnemy = Random(enemyInterval[0], enemyInterval[1]);
+	timeToNextModifier = Random(modifierInterval[0], modifierInterval[1]);
+	spilIgang = true;
+	spilWon = false;
 }

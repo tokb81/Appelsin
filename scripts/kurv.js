@@ -17,7 +17,7 @@ let BOOMmp3;
 
 function preload() {
 	turbanIMG = loadImage('assets/turban.png');
-	BOOMmp3 = loadSound('assets/boom1.mp3')
+	BOOMmp3 = loadSound('assets/boom1.mp3');
 }
 
 class Kurv {
@@ -33,14 +33,14 @@ class Kurv {
 		this.dyb = dybde;
 		this.speed = speed;
 		this.col = [250,230,150];
-		this.img = turbanIMG.resize(this.bred,0)
+		this.img = turbanIMG.resize(this.bred,0);
 	}   
 	
 	// Tegner kurven. Her kan evt. sættes et billede ind i stedet
 	tegn() {
 		fill(this.col);
 		//rect(this.x, this.y, this.bred, this.dyb);
-		image(turbanIMG,this.x,this.y)
+		image(turbanIMG,this.x,this.y);
 	}
 
 	// Flytter kurvens position
@@ -58,7 +58,7 @@ class Kurv {
 			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+object.rad && object.x < this.x+this.bred-object.rad) {
 				BOOMmp3.play();
 				return true;
-			} 
+			}
 			else {
 				return false;
 			}
@@ -66,17 +66,15 @@ class Kurv {
 			// sL is the sidelength of the modifiers
 			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+sL && object.x < this.x+this.bred-sL ) {
 				return true;
-			} 
+			}
 			else {
 				return false;
 			}
-		} 
+		}
 		else {
 			console.log('wrong object passed to grebet()');
 			console.log(object);
 			return false;
 		}
-
-		
 	}
 }
