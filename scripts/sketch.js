@@ -141,7 +141,7 @@ function checkMissOrHit() {
 			i -= 1; // fordi vi nu har fjernet en skal indekset rykkes
 			miss();
 		}
-		else if (frugter[i].yspeed > 0) {
+		else if (frugter[i].yspeed > 0 && frugter[i].tid <= 0) {
 			if (turban.grebet(frugter[i])) {
 				frugter.splice(i, 1);
 				removed += 1;
