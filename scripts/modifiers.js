@@ -13,7 +13,7 @@ class ModifierBase {
 	}
 
 	tegn() {
-		// array magic
+		// array magic (kan skrives mere læseligt men det her er sjovere)
 		fill('rgba(' + [...this.col, (this.decayTime/this.maxDecay)].join(', ') + ')');
 		rect(this.x-sL/2, this.y-sL/2, sL, sL);
 		this.decayTime -= 1;
@@ -30,6 +30,8 @@ class ChangeSpeed extends ModifierBase {
 		this.effected = [];
 	}
 
+	// NB: kræver at alle enemies har en changeSpeed function
+	// også selvom den ikke gør noget
 	activate(enemies) {
 		enemies.forEach(enemy => {
 			 enemy.changeSpeed(this.speedModifier, this.duration);
