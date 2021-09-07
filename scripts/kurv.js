@@ -26,7 +26,7 @@ class Kurv {
 
 	grebet(object) {
 		if (object instanceof Enemy) {
-			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+object.rad && object.x < this.x+this.bred-object.rad) {
+			if (object.y < this.y+this.dyb/2 && object.y > this.y-3 && object.x > this.x+object.rad && object.x < this.x+this.bred-object.rad) {
 				BOOMmp3.play();
 				return true;
 			}

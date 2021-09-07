@@ -9,18 +9,20 @@ function toggleDebug(on) {
         console.log('test')
         document.getElementById('debug').innerHTML = debugHTML;
     } else {
-        document.getElementById('debug').innerHTML = '<button type="button" onclick="reset()">reset</button><br>';
+        document.getElementById('debug').innerHTML = `${button}"reset()">reset</button><br>`;
     }
 }
 
+const button = '<button type="button" onclick='
+
 const debugHTML = `
-<button type="button" onclick="shootNew(1,0)">Appelsin</button><br>
-<button type="button" onclick="shootNew(1,1)">Æble</button><br>
-<button type="button" onclick="shootNew(1,2)">Pære</button><br>
-<button type="button" onclick="shootNew(1,3)">Banan</button><br>
-<button type="button" onclick="modifierNew(1,0)">Slowdown</button><br>
-<button type="button" onclick="modifierNew(1,1)">Speedup</button><br>
-<button type="button" onclick="modifierNew(1,2)">Add life</button><br>
-<button type="button" onclick="modifierNew(1,3)">Lose life</button><br><br><br>
-<button type="button" onclick="reset()">reset</button><br>
+${button}"shootNew(1,0)">Appelsin</button><br>
+${button}"shootNew(1,1)">Æble</button><br>
+${button}"shootNew(1,2)">Pære</button><br>
+${button}"shootNew(1,3)">Banan</button><br>
+${button}"modifierNew(1,0)">Slowdown</button><br>
+${button}"modifierNew(1,1)">Speedup</button><br>
+${button}"modifierNew(1,2)">Add life</button><br>
+${button}"modifierNew(1,3)">Lose life</button><br>
+${button}"reset()">reset</button><br>
 `

@@ -193,7 +193,7 @@ function shootNew(amount = 1, type = null) {
 	//Her skal vi sørge for at en ny appelsin skydes afsted
 	for (let i = 0; i < amount; i++) {
 		if (type == null) {
-			type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
+			//type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
 		}
 
 		rad = random(18,22);
@@ -246,8 +246,6 @@ function modifierNew(amount = 1, type = null) {
 		type = null // reset the type
 	}
 }
-
-
 
 function reset() {
 	extraliv = 0;

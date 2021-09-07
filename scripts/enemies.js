@@ -37,8 +37,10 @@ class GravEnemy extends Enemy {
 
 	// Definere hvordan man ændre objektets hastighed
 	changeSpeed(change, duration, deactivate=false, enemy=this) {
-		enemy.yspeed *= change;
-		enemy.xspeed *= change;
+		// Disse ændringer i hastigheder fås ved at indsætte g*change i formlen for x og y hastigheder
+		// Change svarer dog ikke til en procentsats (decimal) af den oprindelige hastighed
+		enemy.yspeed *= Math.sqrt(change);
+		enemy.xspeed *= Math.sqrt(change);
 		enemy.grav *= change;
 		if (deactivate) { return; }
 		setTimeout(this.changeSpeed, duration/60*1000, 1/change, 0, true, enemy); 
@@ -80,7 +82,7 @@ class Appel extends GravEnemy {
 }
 // Til fjender som kører i en cirkel lignende bevægelse
 class SpiralEnemy extends Enemy {
-	constructor(rad, x=width/2, y=0, yspeed=1, rotPeriod=60, rotRadius=50, col, tid) {
+	constructor(rad, x=width/2, y=null, yspeed=1, rotPeriod=60, rotRadius=50, col, tid) {
 		super(rad, x, y, 0, yspeed, col, tid);
 		this.xstart = x;
 		this.ypos = y;
@@ -110,7 +112,6 @@ class SpiralEnemy extends Enemy {
 		enemy.yspeed *= change;
 		enemy.rotPeriod /= change;
 		enemy.rotTime /= change;
-		enemy.tid /= change;
 		// Bruges til at ændre hastigheden tilbage igen
 		if (deactivate) { return; }
 		setTimeout(this.changeSpeed, duration/60*1000, 1/change, 0, true, enemy);
@@ -125,7 +126,7 @@ class Pear extends SpiralEnemy {
 			this.xstart = this.x - rotRadius;
 		} else {
 			this.xstart = x;
-		} 
+		}
 		if (y == null) { this.y = this.rad; };
 	}
 
@@ -148,6 +149,11 @@ class Banana extends SpiralEnemy {
 		} else {
 			this.xstart = x;
 		}
-		if (y == null) { this.y = this.rad; };
+		console.log(y)
+		if (y == null) { 
+			this.ypos = this.rad;
+			this.y = this.rad;
+		};
+		console.log(this.ypos)
 	}
 }
