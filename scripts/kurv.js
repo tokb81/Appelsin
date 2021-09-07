@@ -38,7 +38,7 @@ class Kurv {
 			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+sL && object.x < this.x+this.bred-sL ) {
 				return true;
 			}
-			else {
+			else { // Egentlig behøves else ikke her
 				return false;
 			}
 		}

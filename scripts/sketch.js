@@ -107,7 +107,7 @@ function display() {
 	textSize(12);
 	text("Score: " + score, width-80, 30);
 	text("Liv: " + liv, width-160, 30);
-	text("Tabt: " + (maxliv - liv), width-240, 30);
+	text("Tabt: " + (maxliv - liv + extraliv), width-240, 30);
 
 	// Vi får appesinerne og modifiers til at chekke om de skal tegnes
 	frugter.forEach(appelsin => {
@@ -232,6 +232,12 @@ function modifierNew(amount = 1, type = null) {
 			case 1:
 				modifiers.push(new ChangeSpeed(1.5, [255,0,0])); // speeds the enemy up
 				break;
+			case 2:
+				modifiers.push(new LifeChange(1)); // gain one life
+				break;
+			case 3:
+				modifiers.push(new LifeChange(-1, [255,0,0], [255,255,255])); // lose one life
+				break;			
 			default:
 				console.log('someone forgot to update the modifierNew() function after creating a new modifier type');
 				break;

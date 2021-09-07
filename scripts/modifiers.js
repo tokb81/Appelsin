@@ -13,9 +13,11 @@ class ModifierBase {
 	}
 
 	tegn() {
-		// array magic
-		fill('rgba(' + [...this.col, (this.decayTime/this.maxDecay)].join(', ') + ')');
+		noStroke();
+		// array magig
+		fill(color(...[...this.col, (this.decayTime/this.maxDecay)*255]))
 		rect(this.x-sL/2, this.y-sL/2, sL, sL);
+		stroke([0]);
 		this.decayTime -= 1;
 		if (this.decayTime <= 0) {
 			this.decayed = true;
@@ -38,8 +40,29 @@ class ChangeSpeed extends ModifierBase {
 }
 
 class LifeChange extends ModifierBase {
-	constructor(changeInLives, col=[255], decayTime, x=random(sL, width-sL), y=random(sL, height-sL)) {
-		super(x, y, decayTime, 0, col);
+	constructor(changeInLives, primeCol=[255,255,255], secCol=[255,0,0], decayTime=5*60, x=random(sL, width-sL), y=random(sL, height-sL)) {
+		super(x, y, decayTime, 0, primeCol);
+		this.col = primeCol
 		this.changeInLives = changeInLives;
+		this.secCol = secCol;
+		this.cS = sL/2.8; // How "big" the cross is
+	}
+
+	tegn() {
+		super.tegn();
+		noStroke();
+		fill(color(...[...this.secCol, (this.decayTime/this.maxDecay)*255]));
+		rect(this.x-sL/2, this.y-sL/2, this.cS, this.cS); // upper left
+		rect(this.x+sL/2, this.y-sL/2, -this.cS, this.cS); // upper right
+		rect(this.x-sL/2, this.y+sL/2, this.cS, -this.cS); // lower left
+		rect(this.x+sL/2, this.y+sL/2, -this.cS, -this.cS); // lower right
+		stroke([0]);
+	}
+
+	activate() {
+		extraliv += this.changeInLives
+		liv += this.changeInLives;
+		checkWinLoss()
+		return;
 	}
 }
