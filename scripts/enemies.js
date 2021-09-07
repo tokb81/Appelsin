@@ -19,13 +19,14 @@ class Enemy {
 		}
 	}
 }
-
+// Til fjender som bliver påvirket af tyngdekraften
 class GravEnemy extends Enemy {
 	constructor(rad, x, y, xspeed, yspeed, col, tid, grav=0.1) {
 		super(rad, x, y, xspeed, yspeed, col, tid);
 		this.grav = grav;
 	}
 
+	// Hvordan man bevæger sig med tyngdekraft
 	move() {
 		if (this.tid <= 0) {
 			this.x += this.xspeed;
@@ -34,6 +35,7 @@ class GravEnemy extends Enemy {
 		}
 	}
 
+	// Definere hvordan man ændre objektets hastighed
 	changeSpeed(change, duration, deactivate=false, enemy=this) {
 		enemy.yspeed *= change;
 		enemy.xspeed *= change;
@@ -76,7 +78,7 @@ class Appel extends GravEnemy {
 		this.xspeed = random(-this.xmaxspeed, this.xmaxspeed);
 	}
 }
-
+// Til fjender som kører i en cirkel lignende bevægelse
 class SpiralEnemy extends Enemy {
 	constructor(rad, x=width/2, y=0, yspeed=1, rotPeriod=60, rotRadius=50, col, tid) {
 		super(rad, x, y, 0, yspeed, col, tid);
@@ -108,6 +110,8 @@ class SpiralEnemy extends Enemy {
 		enemy.yspeed *= change;
 		enemy.rotPeriod /= change;
 		enemy.rotTime /= change;
+		enemy.tid /= change;
+		// Bruges til at ændre hastigheden tilbage igen
 		if (deactivate) { return; }
 		setTimeout(this.changeSpeed, duration/60*1000, 1/change, 0, true, enemy);
 	}

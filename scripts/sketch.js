@@ -2,6 +2,8 @@
 let frugter = [];
 let modifiers = [];
 
+// p5 doesn't load before the setup() fuction has been run so we use this
+// helper function
 function Random(lower, upper=0) {
 	if (upper < lower) {
 		let temp = lower;
@@ -14,7 +16,7 @@ function Random(lower, upper=0) {
 //
 let turban;
 
-//
+// constants
 const AMOUNT_OF_ENEMY_TYPES = 4;
 const AMOUNT_OF_MODIFIER_TYPES = 2;
 const START_NUMBER = 1;
@@ -29,6 +31,10 @@ let timeToNextEnemy = Random(enemyInterval[0], enemyInterval[1]);
 let modifierInterval = [15*60, 25*60]; // the tine between modifiers
 let timeToNextModifier = Random(modifierInterval[0], modifierInterval[1]);
 
+// flag
+let spilIgang = true;
+let spilWon = false; // har vi vundet eller tabt
+
 // Øvrige
 let type = null;
 let score = 0;
@@ -38,10 +44,18 @@ let maxliv = 8; // bruges til at beregne hvor mange frugter man ikke har grebet
 let liv = maxliv;
 let removed = 0; // holder styr på om der er blevet slettet flere end 1 appelsin
 				 // når vi sletter dem for frugter
-let spilIgang = true;   // flag
-let spilWon = false;    // har vi vundet eller tabt
 
-function setup() {  // kører kun en gang, når programmet startes
+
+// load lyd og billeder
+let turbanIMG;
+let BOOMmp3;
+
+function preload() {
+	turbanIMG = loadImage('assets/turban.png');
+	BOOMmp3 = loadSound('assets/boom.mp3');
+}
+
+function setup() {
 	createCanvas(750, 600);
 	textAlign(CENTER, CENTER);
 
@@ -49,8 +63,8 @@ function setup() {  // kører kun en gang, når programmet startes
 		shootNew();
 	}
 	
-	// parametrene til Kurv-konstruktøren er (x, y, bredde, dybde, speed)
-	turban = new Kurv(670, 100, 70, 50, 10);
+	// parametrene til Kurv-konstruktøren er (x, y, bredde, dybde)
+	turban = new Kurv(670, 100, 70, 50);
 }
 
 function draw() {
@@ -74,7 +88,7 @@ function draw() {
 		}
 
 	}
-	else if (!spilWon){ // så er Game Over det der skal vises
+	else if (!spilWon){ // så er Game Over
 		fill(LOST_COLOR);
 		textSize(46);
 		text("Game Over", width/2 + random(-5,5), height/2 + random(3 ));
@@ -95,7 +109,7 @@ function display() {
 	text("Liv: " + liv, width-160, 30);
 	text("Tabt: " + (maxliv - liv), width-240, 30);
 
-	// Vi får appesinerne til at chekke om de skal tegnes
+	// Vi får appesinerne og modifiers til at chekke om de skal tegnes
 	frugter.forEach(appelsin => {
 		appelsin.tegn();
 	});
@@ -108,17 +122,18 @@ function display() {
 
 function move() {
 
-	// vi lader frugterne håndtere deres bevægelse
+	// Vi lader frugterne håndtere deres bevægelse
 	frugter.forEach(appelsin => {
 		appelsin.move();
 	});
 
+	// Vi tjekker nu om noget er ramt eller ude
 	checkMissOrHit();
 };
 
 function checkMissOrHit() {
 	removed = 0;
-	// vi tjekker hvor mange frugter der er grebet og ude
+	// Vi tjekker hvor mange frugter der er grebet og ude
 	for (let i = 0; i < frugter.length; i++) {
 		if (frugter[i].x > width || frugter[i].y > height) {
 			frugter.splice(i, 1);
@@ -126,17 +141,16 @@ function checkMissOrHit() {
 			i -= 1; // fordi vi nu har fjernet en skal indekset rykkes
 			miss();
 		}
-		else if (frugter[i].yspeed > 0) {
+		else if (frugter[i].yspeed > 0 && frugter[i].tid <= 0) {
 			if (turban.grebet(frugter[i])) {
 				frugter.splice(i, 1);
 				removed += 1;
-				i -= 1; // fordi vi nu har fjernet en skal indekset rykkes
+				i -= 1;
 				score += 1;
 			}
 		}
 	}
-
-	// vi tjekker også efter modifiers
+	// Vi tjekker også efter modifiers
 	for (let i = 0; i < modifiers.length; i++) {
 		// Hvis modifieren er grebet aktivere vi den
 		if (turban.grebet(modifiers[i]) ) {
@@ -145,7 +159,7 @@ function checkMissOrHit() {
 			removed += 1;
 			i -= 1;
 		}
-		// hvis modifieren ikke er taget fjerner vi den
+		// Hvis modifieren ikke er blevet taget fjerner vi den
 		else if (modifiers[i].decayed) {
 			modifiers.splice(i, 1);
 			removed += 1;
@@ -153,7 +167,7 @@ function checkMissOrHit() {
 		}
 	};
 
-	// til sidst tjekker vi om vi har vundet eller tabt
+	// Til sidst tjekker vi om vi har vundet eller tabt
 	checkWinLoss()
 }
 
