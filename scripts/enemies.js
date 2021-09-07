@@ -92,11 +92,11 @@ class SpiralEnemy extends Enemy {
 	move() {
 		if (this.tid <= 0) {
 			
-			// we take the differential of cos and sin and use increments instead of exact position
+			// We calculate the x and y position relative to the "actual" position
 			this.xCircle = (Math.cos(this.rotTime/this.rotPeriod*2*Math.PI)*this.rotRadius);
 			this.yCircle = (Math.sin(this.rotTime/this.rotPeriod*2*Math.PI)*this.rotRadius);
 			this.x = this.xCircle + this.xstart;
-			// it is easier to calculate the total distance traveled that add in every frame
+			// It is easier to calculate the total distance traveled that add in every frame
 			this.ypos += this.yspeed;
 			this.y = this.yCircle + this.ypos;
 			
