@@ -23,6 +23,6 @@ ${button}"shootNew(1,3)">Banan</button><br>
 ${button}"modifierNew(1,0)">Slowdown</button><br>
 ${button}"modifierNew(1,1)">Speedup</button><br>
 ${button}"modifierNew(1,2)">Add life</button><br>
-${button}"modifierNew(1,3)">Lose life</button><br>
+${button}"modifierNew(1,3)">Lose life</button><br><br>
 ${button}"reset()">reset</button><br>
 `
