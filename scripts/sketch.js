@@ -18,7 +18,7 @@ let turban;
 
 // constants
 const AMOUNT_OF_ENEMY_TYPES = 4;
-const AMOUNT_OF_MODIFIER_TYPES = 2;
+const AMOUNT_OF_MODIFIER_TYPES = 4;
 const START_NUMBER = 1;
 const WIN_SCORE = 50;
 const LOST_COLOR = [230, 110, 0];
@@ -36,6 +36,7 @@ let spilIgang = true;
 let spilWon = false; // har vi vundet eller tabt
 
 // Øvrige
+let debugMode = false;
 let type = null;
 let score = 0;
 let missed = 0;
@@ -246,10 +247,7 @@ function modifierNew(amount = 1, type = null) {
 	}
 }
 
-function keyPressed() {
-	// Funktionen gør ingenting lige nu
-	return false;  // Forebygger evt. browser default behaviour
-}
+
 
 function reset() {
 	extraliv = 0;
@@ -262,4 +260,10 @@ function reset() {
 	timeToNextModifier = Random(modifierInterval[0], modifierInterval[1]);
 	spilIgang = true;
 	spilWon = false;
+}
+
+function keyPressed() {
+	if (key == 'D') { checkForDebug(); }
+	// Funktionen gør ingenting lige nu
+	return false;  // Forebygger evt. browser default behaviour
 }
