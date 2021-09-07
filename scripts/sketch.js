@@ -1,9 +1,5 @@
-// array til objekter
-let frugter = [];
-let modifiers = [];
-
-// p5 doesn't load before the setup() fuction has been run so we use this
-// helper function
+// It seems like p5 doesn't load before the setup() fuction has been run 
+// so we use this helper function in the beginning
 function Random(lower, upper=0) {
 	if (upper < lower) {
 		let temp = lower;
@@ -13,41 +9,45 @@ function Random(lower, upper=0) {
 	return Math.random()*(upper-lower) + lower;
 }
 
-//
+// turban
 let turban;
 
-// constants
+// Constants
 const AMOUNT_OF_ENEMY_TYPES = 4;
 const AMOUNT_OF_MODIFIER_TYPES = 4;
 const START_NUMBER = 1;
-const WIN_SCORE = 50;
+const WIN_SCORE = 50; // det er muligt at vinde, kun pga. jeg ikke implementerede et scoreboard
 const LOST_COLOR = [230, 110, 0];
 const WON_COLOR = [0, 255, 0];
 
-//intervals
+// Array til objekter
+let frugter = [];
+let modifiers = [];
+
+// Intervals
 let enemyInterval = [1*60, 1.5*60]; // the time between shots
 let timeToNextEnemy = Random(enemyInterval[0], enemyInterval[1]);
 
 let modifierInterval = [15*60, 25*60]; // the tine between modifiers
 let timeToNextModifier = Random(modifierInterval[0], modifierInterval[1]);
 
-// flag
+// Flag
 let spilIgang = true;
 let spilWon = false; // har vi vundet eller tabt
+let debugMode = false; // har man adgang til hjemmelavet "debug consol"
 
 // Øvrige
-let debugMode = false;
 let type = null;
 let score = 0;
 let missed = 0;
 let extraliv = 0;
-let maxliv = 8; // bruges til at beregne hvor mange frugter man ikke har grebet
+// Burde nok hede start liv  e.l.
+let maxliv = 8; // Bruges til at beregne hvor mange frugter man ikke har grebet
 let liv = maxliv;
-let removed = 0; // holder styr på om der er blevet slettet flere end 1 appelsin
+let removed = 0; // Holder styr på om der er blevet slettet flere end 1 appelsin
 				 // når vi sletter dem for frugter
 
-
-// load lyd og billeder
+// Load lyd og billeder
 let turbanIMG;
 let BOOMmp3;
 
@@ -64,7 +64,7 @@ function setup() {
 		shootNew();
 	}
 	
-	// parametrene til Kurv-konstruktøren er (x, y, bredde, dybde)
+	// Parametrene til Kurv-konstruktøren er (x, y, bredde, dybde)
 	turban = new Kurv(670, 100, 70, 50);
 }
 
