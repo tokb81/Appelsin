@@ -1,6 +1,7 @@
 // the sL of all the modifiers (they all have the same size)
 const sL = 20;
 
+// Bare så vi ikke behøves så mange this.RANDOM og definere tegn funktionen hele tiden
 class ModifierBase {
 	constructor(x, y, decayTime, duration, col) {
 		this.x = x;
@@ -14,7 +15,7 @@ class ModifierBase {
 
 	tegn() {
 		noStroke();
-		// array magig
+		// array magic for at fade farven ud for at indikere, hvornår den forsvinder
 		fill(color(...[...this.col, (this.decayTime/this.maxDecay)*255]))
 		rect(this.x-sL/2, this.y-sL/2, sL, sL);
 		stroke([0]);
@@ -51,7 +52,8 @@ class LifeChange extends ModifierBase {
 	tegn() {
 		super.tegn();
 		noStroke();
-		fill(color(...[...this.secCol, (this.decayTime/this.maxDecay)*255]));
+		// fader stille ud for at indikere, hvornår den forsvinder
+		fill(color(...[...this.secCol, (this.decayTime/this.maxDecay)*255])); 
 		rect(this.x-sL/2, this.y-sL/2, this.cS, this.cS); // upper left
 		rect(this.x+sL/2, this.y-sL/2, -this.cS, this.cS); // upper right
 		rect(this.x-sL/2, this.y+sL/2, this.cS, -this.cS); // lower left

@@ -1,3 +1,4 @@
+// Disse 2 functioner håndtere at vise og fjerne debug konsollen
 function checkForDebug() {
     if (debugMode)  { debugMode = false; }
     else            { debugMode = true; }
@@ -13,6 +14,8 @@ function toggleDebug(on) {
     }
 }
 
+
+// Noget kode som kan indskydes i index filen til at hjælpe med at debugge
 const button = '<button type="button" onclick='
 
 const debugHTML = `

@@ -26,24 +26,24 @@ class Kurv {
 
 	grebet(object) {
 		if (object instanceof Enemy) {
+			// Det er gjort lidt men ikke meget lettere at gribe
+			// spilleren vil nok føle sig lidt snydt, men det er bare ærgeligt
+			// Det er jo ikke meningen at det skal være let og man skal helst også kunne se turbanen
 			if (object.y < this.y+this.dyb/2 && object.y > this.y-3 && object.x > this.x+object.rad && object.x < this.x+this.bred-object.rad) {
 				BOOMmp3.play();
 				return true;
 			}
-			else {
-				return false;
-			}
+			return false;
+
 		} else if (object instanceof ModifierBase) {
 			// sL is the sidelength of the modifiers
-			if (object.y < this.y+7 && object.y > this.y-3 && object.x > this.x+sL && object.x < this.x+this.bred-sL ) {
+			if (object.y < this.y+this.dyb/2 && object.y > this.y-3 && object.x > this.x+sL && object.x < this.x+this.bred-sL ) {
 				return true;
 			}
-			else { // Egentlig behøves else ikke her
-				return false;
-			}
+			return false;
 		}
 		else {
-			console.log('wrong object passed to grebet()');
+			console.log('unkown object passed to grebet()');
 			console.log(object);
 			return false;
 		}

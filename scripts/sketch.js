@@ -193,6 +193,7 @@ function shootNew(amount = 1, type = null) {
 	//Her skal vi sørge for at en ny appelsin skydes afsted
 	for (let i = 0; i < amount; i++) {
 		if (type == null) {
+			// Vælger en tilfældig type alt efter hvor mange fjernder der er defineret
 			type = Math.floor(Math.random()*AMOUNT_OF_ENEMY_TYPES);
 		}
 
@@ -223,6 +224,7 @@ function modifierNew(amount = 1, type = null) {
 	// Det er essentielt det samme som shootNew, og kunne godt integreres i den
 	for (let i = 0; i < amount; i++) {
 		if (type == null) {
+			// samme som i shootNew bare for modifiers
 			type = Math.floor(Math.random()*AMOUNT_OF_MODIFIER_TYPES);
 		}
 		rad = random(18,22);
@@ -247,6 +249,7 @@ function modifierNew(amount = 1, type = null) {
 	}
 }
 
+// for at genstarte spillet
 function reset() {
 	extraliv = 0;
 	liv = maxliv;
@@ -261,7 +264,8 @@ function reset() {
 }
 
 function keyPressed() {
+	// toggle debug functionen
 	if (key == 'D') { checkForDebug(); }
-	// Funktionen gør ingenting lige nu
+
 	return false;  // Forebygger evt. browser default behaviour
 }
