@@ -36,3 +36,10 @@ class ChangeSpeed extends ModifierBase {
 		});
 	}
 }
+
+class LifeChange extends ModifierBase {
+	constructor(changeInLives, col=[255], decayTime, x=random(sL, width-sL), y=random(sL, height-sL)) {
+		super(x, y, decayTime, 0, col);
+		this.changeInLives = changeInLives;
+	}
+}
